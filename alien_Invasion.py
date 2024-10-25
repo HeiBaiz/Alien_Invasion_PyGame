@@ -3,6 +3,7 @@ import sys
 
 from settings import Settings
 from ship import Ship
+from z02 import Z02
 
 class AlienInvasion:
     """管理游戏资源和行为的类"""
@@ -19,23 +20,49 @@ class AlienInvasion:
         pygame.display.set_caption("Alien Invasion")
         
         self.ship = Ship(self)
+        self.z02 = Z02(self)
         
     def run_game(self):
         """开始游戏的主循环"""
         while True:
-            # 侦听键盘和鼠标事件
-            for event in pygame.event.get():
-                # quit the game event
-                if event.type == pygame.QUIT:
-                    sys.exit()
-            
-            # 每次循环都重绘屏幕
-            self.screen.fill(self.settings.bg_color)
-            self.ship.blitme()
-            
-            # 让最近绘制的屏幕可见
-            pygame.display.flip()
+            self._check_events()
+            self.ship.update()
+            self._update_screen()
             self.clock.tick(60)
+            
+    def _check_events(self):
+         # 侦听键盘和鼠标事件
+        for event in pygame.event.get():
+            # 退出游戏
+            if event.type == pygame.QUIT:
+                sys.exit()
+                
+            elif event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_RIGHT:
+                    # 向右移动飞船
+                    self.ship.moving_right = True
+                elif event.key == pygame.K_LEFT:
+                    # 向左移动飞船
+                    self.ship.moving_left = True
+                    
+            elif event.type == pygame.KEYUP:
+                if event.key == pygame.K_LEFT:
+                    #停止移动
+                    self.ship.moving_left = False
+                elif event.key == pygame.K_RIGHT:
+                    #停止移动
+                    self.ship.moving_right = False
+                
+    def _update_screen(self):
+        """更新屏幕上的图像，并切换到新屏幕"""
+        
+        # 每次循环都重绘屏幕
+        self.screen.fill(self.settings.bg_color)
+        self.ship.blitme()
+        self.z02.blitme()
+        
+        # 让最近绘制的屏幕可见
+        pygame.display.flip()
 
 ##################################################################
                 
