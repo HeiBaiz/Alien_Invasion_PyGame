@@ -2,6 +2,7 @@ import pygame
 import sys
 
 from settings import Settings
+from ship import Ship
 
 class AlienInvasion:
     """管理游戏资源和行为的类"""
@@ -17,6 +18,8 @@ class AlienInvasion:
             (self.settings.screen_width, self.settings.screen_height))
         pygame.display.set_caption("Alien Invasion")
         
+        self.ship = Ship(self)
+        
     def run_game(self):
         """开始游戏的主循环"""
         while True:
@@ -26,10 +29,11 @@ class AlienInvasion:
                 if event.type == pygame.QUIT:
                     sys.exit()
             
-            # 每次循环都填充背景色
+            # 每次循环都重绘屏幕
             self.screen.fill(self.settings.bg_color)
+            self.ship.blitme()
             
-            # update the display
+            # 让最近绘制的屏幕可见
             pygame.display.flip()
             self.clock.tick(60)
 
