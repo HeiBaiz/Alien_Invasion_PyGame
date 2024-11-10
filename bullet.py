@@ -12,8 +12,12 @@ class Bullet(Sprite):
         self.color = self.settings.bullet_color
         
         # 在（0，0）处创建子弹的矩阵，再设置正确位置
-        self.rect = pygame.Rect(0,0,self.settings.bullet_width,
-                                self.settings.bullet_height)
+        #self.rect = pygame.Rect(0,0,self.settings.bullet_width,self.settings.bullet_height)
+        
+        # 加载子弹图像并获取其外接矩形
+        self.image = pygame.image.load('images/bullet.bmp')
+        self.rect = self.image.get_rect()
+        
         self.rect.midtop = ai_game.ship.rect.midtop 
         
         # 存储浮点数表示子弹位置
@@ -28,4 +32,6 @@ class Bullet(Sprite):
         
     def draw_bullet(self):
         """在屏幕上绘制子弹"""
-        pygame.draw.rect(self.screen, self.color, self.rect)
+        #pygame.draw.rect(self.screen, self.color, self.rect)
+        # 发射图片
+        self.screen.blit(self.image,self.rect)
